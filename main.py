@@ -58,12 +58,16 @@ def log_metrics_classification(y_true, y_prediction):
     for class_ in ['0', '1']:
         for metric in report[class_]:
             log_name = class_ + '_' + metric
-            # insert your code here ~ 1 line
+            # insert your code here 
+            mlflow.log_metric(log_name, report[class_][metric])
 
 
 def log_metrics_regression(y_true, y_prediction):
     rmse, mae, r2 = eval_metrics(y_true, y_prediction)
     # log metrics here ~ 3 lines
+    mlflow.log_metric('rmse', rmse)
+    mlflow.log_metric('mae', mae)
+    mlflow.log_metric('r2', r2)
 
 
 def run_experiment(df, alpha, l1_ratio):
@@ -81,16 +85,21 @@ def run_experiment(df, alpha, l1_ratio):
 
         # log parameters
         # Your code here ~ 2 lines
+        mlflow.log_param("alpha", alpha)
+        mlflow.log_param("l1_ratio", l1_ratio)
 
         # log artifact
         scatter_name = './scatter_results-ElasticNet.png'
         # save scatter plot as artifact here ~ 2 lines
+        scatter_plot_result(test_y, prediction_test, scatter_name)
+        mlflow.log_artifact(scatter_name)
 
         # log metrics
         log_metrics_regression(test_y, prediction_test)
 
         # log sklearn model
         # log the sklearn model here  ~ 1 line
+        mlflow.sklearn.log_model(lr, 'elastic_net')
 
 
 def test_range_params():
