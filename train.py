@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # coding: utf-8
 
 import sys
@@ -42,15 +41,15 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 
-def scatter_plot_result(y_actual, y_pred, model_name):
+def scatter_plot_result(y_actual, y_pred, plot_name):
     plt.scatter(y_actual, y_pred)
     plt.ylabel('Target predicted')
     plt.xlabel('True Target')
-    plt.title(model_name)
+    plt.title(plot_name)
     plt.text(500, 250, r'$RMSE=%.2f, R^2$=%.2f, MAE=%.2f' % (np.sqrt(mean_squared_error(y_actual, y_pred)),
                                                              r2_score(y_actual, y_pred),
                                                              mean_absolute_error(y_actual, y_pred)))
-    plt.savefig('./scatter_results-{}.png'.format(model_name))
+    plt.savefig(plot_name)
     plt.close()
 
 
@@ -91,8 +90,8 @@ def run_experiment(df, alpha, l1_ratio):
 
         # log artifact
         # save scatter plot as artifact here ~ 3 lines
-        scatter_plot_result(test_y, prediction_test, 'ElasticNet')
         scatter_name = './scatter_results-ElasticNet.png'
+        scatter_plot_result(test_y, prediction_test, scatter_name)
         mlflow.log_artifact(scatter_name)
 
         # log metrics
