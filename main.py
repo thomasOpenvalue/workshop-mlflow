@@ -10,8 +10,8 @@ import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
 from sklearn.linear_model import ElasticNet
-from sklearn.metrics import classification_report, mean_absolute_error, mean_squared_error, r2_score
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, mean_absolute_error, mean_squared_error, r2_score, make_scorer
+from sklearn.model_selection import train_test_split, cross_validate, cross_val_predict
 
 
 def load_data():
@@ -52,7 +52,7 @@ def scatter_plot_result(y_actual, y_pred, name):
     plt.scatter(y_actual, y_pred)
     plt.ylabel('Target predicted')
     plt.xlabel('True Target')
-    plt.title(model_name)
+    plt.title(name)
     
     pos_x = y_actual.max() * 0.60
     pos_y = y_pred.max() * 0.90
@@ -62,6 +62,7 @@ def scatter_plot_result(y_actual, y_pred, name):
                                               mean_absolute_error(y_actual, y_pred)))
     plt.plot([0, y_actual.max()], [0, y_actual.max()], ls="--", c=".3")
     plt.savefig('./scatter_results-{}.png'.format(name)) # Save to be included in Artefacts
+    plt.close()
 
 
 def plot_cv_results(iMetric, iResCV, model_name=None):
@@ -84,6 +85,7 @@ def plot_cv_results(iMetric, iResCV, model_name=None):
     plt.title(iMetric)
     if model_name is not None:
         plt.savefig('./cross_val_results-{}.png'.format(model_name))
+    plt.close()
     
     
 def log_metrics_classification(y_true, y_prediction):
@@ -145,6 +147,13 @@ def run_experiment(df, alpha, l1_ratio, experiment_name=None):
         # save scatter plot as artifact here ~ 2 lines
         scatter_plot_result(y, prediction_test, scatter_name)
         mlflow.log_artifact('./scatter_results-{}.png'.format(scatter_name))
+        
+        # save cv_results ~ 1 line
+        for metric in ['r2', 'mse', 'mae']:
+            cv_result_name = metric + '_ElasticNet'
+            # plot cv result here using cv_result_name to save the plot
+            plot_cv_results(metric, model, model_name=cv_result_name)
+            mlflow.log_artifact('./cross_val_results-{}.png'.format(cv_result_name))
 
         # log metrics
         log_metrics_regression(model)
