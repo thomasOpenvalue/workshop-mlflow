@@ -66,7 +66,14 @@ def log_metrics_regression(y_true, y_prediction):
     # log metrics here ~ 3 lines
 
 
-def run_experiment(df, alpha, l1_ratio):
+def set_mlfow_experiment(experiment_name):
+    experiment_name = 'Default' if experiment_name is None else experiment_name
+    mlflow.set_experiment(experiment_name)    
+
+    
+def run_experiment(df, alpha, l1_ration experiment_name=None):
+    # set exeperiment here ~ 1 line
+    
     # Split data
     train_x, train_y, test_x, test_y = get_train_test_data(df)
 

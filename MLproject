@@ -5,6 +5,6 @@ conda_env: conda.yaml
 entry_points:
   main:
     parameters:
-      alpha: {type: float, default: 0.5}
-      l1_ratio: {type: float, default: 0.5}
-    command: "python main.py {alpha} {l1_ratio}"
+      alpha: # precise type and default value
+      l1_ratio: # precise type and default value
+    command: # bash command like "python ... {...}"
