@@ -1,0 +1,11 @@
+name: workshop-mlflow
+channels:
+  - defaults
+dependencies:
+  - numpy=1.14.3
+  - pandas==0.23.0
+  - pandas-profiling==1.4.1
+  - scikit-learn==0.19.1
+  - shap==0.28.5
+  - pip:
+    - mlflow
