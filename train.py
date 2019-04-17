@@ -145,6 +145,8 @@ def run_experiment(df, alpha, l1_ration experiment_name=None):
         log_metrics_regression(model)
 
         # log sklearn model
+        train_x, train_y, test_x, test_y = get_train_test_data(df)
+        lr.fit(train_x, train_y)
         # log the sklearn model here  ~ 1 line
 
 
